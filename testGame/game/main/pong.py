@@ -133,7 +133,7 @@ scores = score()
 font = pygame.font.SysFont("Comic Sans", 72)
 
 # Set the width and height of the screen [width, height]
-size = (400, 800)
+size = (400, 900)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("My Game")
 # Loop until the user clicks the close button.
