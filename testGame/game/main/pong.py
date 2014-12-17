@@ -24,6 +24,8 @@ RANDOM = RandColor()
 NUMBALLS=2
 SCORE=True
 
+size = (400, 800)
+
 
 
 
@@ -53,43 +55,52 @@ class Paddle:
 class score:
     p1score=0
     p2score=0
-    
+class fsize:
+    xl=100
+    xr=size[0]-100
+    yt=0
+    yb=size[1]
+        
 def GenerateBalls(count):
     bg=[]
     for c in range(0,count):
-        b=Ball(random.randint(100,size[0]),random.randint(100,size[1]),random.choice([1,-1]),random.choice([1,-1]),10,10,RandColor()) 
+        b=Ball(random.randint(100,fsize.xr),random.randint(100,fsize.yb),random.choice([1,-1]),random.choice([1,-1]),10,10,RandColor()) 
         bg.append(b)
         
     return bg
 
 def wallColl(Ball):
-    if (Ball.x>=(size[0]-Ball.xd)):
+    if (Ball.x>=(fsize.xr-Ball.xd)):
         Ball.xdirec = Ball.xdirec * -1
         Ball.Ccolor=RandColor()
-    if (Ball.x<=1):
+    if (Ball.x<=fsize.xl):
         Ball.xdirec = Ball.xdirec * -1
         Ball.Ccolor=RandColor()
-    if (Ball.y>=(size[1]-Ball.yd)):
+    if (Ball.y>=(fsize.yb-Ball.yd)):
         Ball.ydirec = Ball.ydirec * -1
         Ball.Ccolor=RandColor()
         scores.p1score+=1
+        fsize.xr=fsize.xr+5
+        fsize.xl=fsize.xl-5
         #print(scores.p1score)  
-    if (Ball.y<=1):
+    if (Ball.y<=fsize.yt):
         Ball.ydirec = Ball.ydirec * -1
         Ball.Ccolor=RandColor()
         scores.p2score+=1
-            
+        fsize.xr=fsize.xr+5
+        fsize.xl=fsize.xl-5    
     Ball.x=Ball.x+Ball.xdirec
     Ball.y=Ball.y+Ball.ydirec
     
 def wallCollP(Paddle):
-    if (Paddle.x>=(size[0]-Paddle.xd)):
+    if (Paddle.x>=(fsize.xr-Paddle.xd)):
         Paddle.xdirec = Paddle.xdirec *-1
         Paddle.Ccolor=RandColor()
-    if (Paddle.x<=1):
+    if (Paddle.x<=fsize.xl):
         Paddle.xdirec = Paddle.xdirec *-1
         Paddle.Ccolor=RandColor()
     Paddle.x=Paddle.x+Paddle.xdirec   
+
 def BallColl(bG,a):
     
     bGtemp=list(bG)
@@ -122,7 +133,7 @@ def BallCollP(bG,a):
         if(((b1.y==(p.y+p.yd) or b1.y==(p.y))) and(pA[0] in range(p.x,(p.x+p.xd)))):
             b1.ydirec=b1.ydirec*-1
             b1.xdirec=b1.xdirec*1
-        if(((b1.y==(p2.y+p2.yd) or b1.y==(p2.y)))and(pA[0] in range(p2.x,(p2.x+p2.xd)))):
+        if(((b1.y==(p2.y-p2.yd) or b1.y==(p2.y)))and(pA[0] in range(p2.x,(p2.x+p2.xd)))):
             b1.ydirec=b1.ydirec*-1
             b1.xdirec=b1.xdirec*1
     
@@ -133,7 +144,7 @@ scores = score()
 font = pygame.font.SysFont("Comic Sans", 72)
 
 # Set the width and height of the screen [width, height]
-size = (400, 900)
+
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("My Game")
 # Loop until the user clicks the close button.
@@ -210,7 +221,12 @@ while not done:
     pygame.draw.rect(screen, p.Ccolor, [p.x,p.y,p.xd,p.yd], 5);
     pygame.draw.rect(screen, p2.Ccolor, [p2.x,p2.y,p2.xd,p2.yd], 5);
     
-
+    pygame.draw.lines(screen, WHITE, True,[(fsize.xl,fsize.yt),(fsize.xl,fsize.yb)], 5);
+    pygame.draw.lines(screen, WHITE, True,[(fsize.xr,fsize.yt),(fsize.xr,fsize.yb)], 5);
+    
+    
+    if fsize.xl<=0:
+        done=True
     
     myfont = pygame.font.SysFont("Comic Sans MS", 10)
     # apply it to text on a label
@@ -222,6 +238,8 @@ while not done:
     # put the label object on the screen at point x=100, y=100
     screen.blit(label, (10, 10))
     screen.blit(label2, (10, 750))
+    
+    
     
 # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
