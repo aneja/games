@@ -7,6 +7,7 @@
 import pygame,random,math
 
 
+
 def RandColor():
     return(random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
@@ -60,6 +61,9 @@ class fsize:
     xr=size[0]-100
     yt=0
     yb=size[1]
+
+class delay:
+    d=120
         
 def GenerateBalls(count):
     bg=[]
@@ -82,13 +86,15 @@ def wallColl(Ball):
         scores.p1score+=1
         fsize.xr=fsize.xr+5
         fsize.xl=fsize.xl-5
+        delay.d=delay.d+10
         #print(scores.p1score)  
     if (Ball.y<=fsize.yt):
         Ball.ydirec = Ball.ydirec * -1
         Ball.Ccolor=RandColor()
         scores.p2score+=1
         fsize.xr=fsize.xr+5
-        fsize.xl=fsize.xl-5    
+        fsize.xl=fsize.xl-5
+        delay.d = delay.d+10    
     Ball.x=Ball.x+Ball.xdirec
     Ball.y=Ball.y+Ball.ydirec
     
@@ -244,7 +250,7 @@ while not done:
 # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
 # --- Limit to 60 frames per second
-    clock.tick(120)
+    clock.tick(delay.d)
     
 # Close the window and quit.
 # If you forget this line, the program will 'hang'
